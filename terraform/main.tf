@@ -39,21 +39,6 @@ module "prometheus" {
   create_resources = local.create_main
 }
 
-module "electrum" {
-  source = "./modules/electrum"
-
-  name                     = "lb"
-  network                  = "default"
-  zones                    = var.zones
-  region                   = var.regions[0]
-  instances                = 1
-  machine_type             = "e2-standard-2"
-  project                  = var.project
-  electrum_service_account = terraform.workspace != "main" ? data.terraform_remote_state.main.outputs.electrum_service_account : ""
-
-  create_resources = local.create_main
-}
-
 module "tor" {
   source = "./modules/tor"
 
@@ -88,9 +73,7 @@ module "bitcoin-testnet" {
   network                     = "testnet"
   disk_type                   = var.disk_type
   instance_type               = var.instance_type
-  preemptible_instance_type   = var.preemptible_instance_type
   size                        = var.cluster_size
-  preemptible_size            = var.preemptible_cluster_size
   project                     = var.project
   service_account_prom        = terraform.workspace == "main" ? module.prometheus.service_account : data.terraform_remote_state.main.outputs.prometheus_service_account
   docker_tag_node_exporter    = var.docker_tag_node_exporter
@@ -114,9 +97,7 @@ module "bitcoin-mainnet" {
   mempooldat                  = var.mempooldat
   fullurl                     = var.fullurl
   instance_type               = var.instance_type
-  preemptible_instance_type   = var.preemptible_instance_type
   size                        = var.cluster_size
-  preemptible_size            = var.preemptible_cluster_size
   project                     = var.project
   service_account_prom        = terraform.workspace == "main" ? module.prometheus.service_account : data.terraform_remote_state.main.outputs.prometheus_service_account
   docker_tag_node_exporter    = var.docker_tag_node_exporter
@@ -140,9 +121,7 @@ module "liquid-mainnet" {
   mempooldat                  = var.mempooldat
   fullurl                     = var.fullurl
   instance_type               = var.instance_type
-  preemptible_instance_type   = var.preemptible_instance_type
   size                        = var.cluster_size
-  preemptible_size            = var.preemptible_cluster_size
   project                     = var.project
   service_account_prom        = terraform.workspace == "main" ? module.prometheus.service_account : data.terraform_remote_state.main.outputs.prometheus_service_account
   docker_tag_node_exporter    = var.docker_tag_node_exporter
@@ -166,9 +145,7 @@ module "liquid-testnet" {
   mempooldat                  = var.mempooldat
   fullurl                     = var.fullurl
   instance_type               = var.instance_type
-  preemptible_instance_type   = var.preemptible_instance_type
   size                        = var.cluster_size
-  preemptible_size            = var.preemptible_cluster_size
   project                     = var.project
   service_account_prom        = terraform.workspace == "main" ? module.prometheus.service_account : data.terraform_remote_state.main.outputs.prometheus_service_account
   docker_tag_node_exporter    = var.docker_tag_node_exporter
